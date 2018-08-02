@@ -17,7 +17,7 @@ y = pdb_coor(:,2);
 z = pdb_coor(:,3);
 for ii = 1:num_res
     r_sqr = (para_center(1) - x(ii))^2 + (para_center(2) - y(ii))^2 +(para_center(3) - z(ii))^2;
-    A(ii,:) =(1/r_sqr^2.5 * 1/4 * pi) .* [x(ii)^2 - z(ii)^2, 2*x(ii)*y(ii), 2*x(ii)*z(ii), y(ii)^2 - z(ii)^2, 2*y(ii)*z(ii)];
+    A(ii,:) =(1/r_sqr^2.5 * 1/(4 * pi)) .* [x(ii)^2 - z(ii)^2, 2*x(ii)*y(ii), 2*x(ii)*z(ii), y(ii)^2 - z(ii)^2, 2*y(ii)*z(ii)];
 end
 %SVD 
 [U, S, V] = svd(A);
