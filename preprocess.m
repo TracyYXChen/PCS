@@ -5,7 +5,8 @@
 %output: coordinates of those atoms in the PDB file
 
 %---read pcs file ---
-fid = fopen('data/pcs_exp.txt');
+function [pcs_exp, pdb_coor] = preprocess(pcs_exp_file, pdb_file)
+fid = fopen(pcs_exp_file);
 data=textscan(fid,'%f %s %f %f','delimiter',' ');
 fclose(fid);
 res_num = data{1};
@@ -13,7 +14,8 @@ atom = data{2};
 pcs_exp = data{3};
 err = data{4};
 %---read pdb file ---
-PDBdata = pdb2mat('data/1d3z.pdb');
+PDBdata = pdb2mat(pdb_file);
+fprintf('Finished reading PDB file.\n')
 %num of all atoms and selected atoms
 num_select = length(res_num);
 num_all = length(PDBdata.resNum);
