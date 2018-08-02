@@ -13,12 +13,13 @@
 %define parameter
 pcs_exp_file = 'data/pcs_exp.txt';
 pdb_file = 'data/1d3z.pdb';
+pdb_model = 1;
 %1st column is exp, 2nd column is numbat prediction
 exp_numbat_file = 'data/pcs_exp_numbat.txt';
-%this is an output file
+%output file: 1st column exp, 2nd column: our prediction value
 pcs_exp_pred_file = 'data/pcs_exp_pred.txt';
 %extract coordinates and exp value
-[pcs_exp,pdb_coor] = preprocess(pcs_exp_file, pdb_file);
+[pcs_exp,pdb_coor] = preprocess(pcs_exp_file, pdb_file, pdb_model);
 
 %call function
 guess = [0,0,0];
