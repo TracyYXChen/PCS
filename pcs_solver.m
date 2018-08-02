@@ -1,6 +1,6 @@
 %----------------------------------
 %Solve Pseudocontact Shift(PCS) tensors 
-%Yuexi Chen
+%Yuexi (Tracy) Chen
 %July 31, 2018
 %----------------------------------
 %1. read PDB file and extract coordinates + read PCS file
