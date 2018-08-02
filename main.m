@@ -1,0 +1,32 @@
+%----------------
+%perform experiment
+%-------
+%outline
+%-------
+%1. read PDB file and extract coordinates according to residues in PCS file
+%2. Initialize coordinates of paramagnetic center
+%3. solve PCS by SVD 
+%4. calculate Chi^2 between PCS_exp and PCS_theory
+%5. reinitialize coor of paramagnetic center
+%6. After several iterations, return calculated PCS tensors and coor of paramagnetic center
+
+%define parameter
+pcs_exp_file = 'data/pcs_exp.txt';
+pdb_file = 'data/1d3z.pdb';
+%1st column is exp, 2nd column is numbat prediction
+exp_numbat_file = 'data/pcs_exp_numbat.txt';
+%this is an output file
+pcs_exp_pred_file = 'data/pcs_exp_pred.txt';
+%extract coordinates and exp value
+[pcs_exp,pdb_coor] = preprocess(pcs_exp_file, pdb_file);
+
+%call function
+guess = [0,0,0];
+options = optimset('TolFun',1e-9,'TolX',1e-9,'MaxFunEvals',1000000,'MaxIter',100000);
+fprintf('Start searching process...\n')
+[position, Chi2]=fminsearch(@(guess) pcs_solver(guess,pdb_coor,pcs_exp,pcs_exp_pred_file),guess,options);
+fprintf('Search finished.\n')
+%compare with numbat
+exp_numbat = dlmread(exp_numbat_file);
+numbat_chi2 = sum((exp_numbat(:,1) - exp_numbat(:,2)).^2);
+fprintf('Our chi square is %f, and Chi square of numbat is %f', Chi2, numbat_chi2)
