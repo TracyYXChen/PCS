@@ -2,17 +2,7 @@
 %Solve Pseudocontact Shift(PCS) tensors 
 %Yuexi (Tracy) Chen
 %July 31, 2018
-%----------------------------------
-%1. read PDB file and extract coordinates + read PCS file
-%2. Initialize coordinates of paramagnetic center
-%3. solve PCS by SVD 
-%4. calculate Chi^2 between PCS_exp and PCS_theory
-%5. reinitialize coor of paramagnetic center
-%6. After several iterations, return calculated PCS tensors and coor of paramagnetic center
 
-%------------
-%read coordinates
-%Suppose we have N nucleaus, x, y, z should be (N*1) 
 function Chi_2 = pcs_solver(guess, pdb_coor, pcs_exp, pcs_file)
 %guess: initialization of paramagnetic center
 %pbd_coor: pdb coordinates
