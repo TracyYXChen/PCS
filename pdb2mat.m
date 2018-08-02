@@ -1,4 +1,5 @@
-%%  -- pdb2mat.m --
+%add model number arguments
+%-- pdb2mat.m --
 % This program is the most speedy way to read a PDB file that I could come
 % up with. It's function is simple: give it a PDB file and out comes a
 % matlab-friendly data structure. In cumbersomely large PDB's (such as those that 
@@ -59,7 +60,7 @@
 % up by 7-8%. Each string data removed (such as resName or atomName) speeds
 % it up by 1-2%.
 
-function [PDBdata] = pdb2mat(readFile)
+function [PDBdata] = pdb2mat(readFile,model_num)
 %% -- OUTPUT --
 
 tic;
@@ -91,30 +92,37 @@ Z          = cell(1,numLines);
 comment    = cell(1,numLines);
 
 % read each line
-m = 1;
+model_now = sprintf('MODEL        %d',model_num);
+model_next = sprintf('MODEL        %d',model_num +1);    
 for n = 1:numLines
-    
-    thisLine = cell2mat(splitLines(n));
-    
-    if length(thisLine) > 53 && sum(isstrprop(thisLine(23:53), 'alpha')) == 0
-        
-        recordName(m) = {thisLine(1:6)};
-        atomNum(m)    = {thisLine(7:11)};
-        atomName(m)   = {thisLine(13:16)};
-        altLoc(m)     = {thisLine(17)};
-        resName(m)    = {thisLine(18:20)};
-        
-        chainID(m)    = {thisLine(22)};
-        resNum(m)     = {thisLine(23:26)};
-        X(m)          = {thisLine(31:38)};
-        Y(m)          = {thisLine(39:46)};
-        Z(m)          = {thisLine(47:54)};
-        
-        comment(m)            = {thisLine(55:end)};
-        
-        m = m + 1;
+    modelLine = cell2mat(splitLines(n));
+    if contains(modelLine, 'MODEL') && contains(modelLine, model_now)
+        starter = n;
+    else if  contains(modelLine, model_next);
+        ender = n-1;
+        end
     end
-    
+end
+        
+for m = starter:ender
+    thisLine = cell2mat(splitLines(m));
+    if length(thisLine) > 53 && sum(isstrprop(thisLine(23:53), 'alpha')) == 0    
+            recordName(m) = {thisLine(1:6)};
+            atomNum(m)    = {thisLine(7:11)};
+            atomName(m)   = {thisLine(13:16)};
+            altLoc(m)     = {thisLine(17)};
+            resName(m)    = {thisLine(18:20)};
+        
+            chainID(m)    = {thisLine(22)};
+            resNum(m)     = {thisLine(23:26)};
+            X(m)          = {thisLine(31:38)};
+            Y(m)          = {thisLine(39:46)};
+            Z(m)          = {thisLine(47:54)};
+        
+            comment(m)            = {thisLine(55:end)};
+        
+            m = m + 1;
+    end    
 end
 
 % trim exess
