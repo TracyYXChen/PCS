@@ -1,0 +1,9 @@
+parameter value error
+chi_ax(10^-32m^3) -15.565 1.9
+chi_rh(10^-32m^3) -5.948 2.72
+x(angstrom) 56.611 1.2
+y(angstrom) -93.464 0.6
+z(angstrom) -10.031 1.1
+alpha(degree) 131.965 7.4
+beta(degree) 78.642 5.8
+gamma(degree) 97.783 16.9
