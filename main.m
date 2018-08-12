@@ -18,16 +18,24 @@ pdb_model = 1;
 exp_numbat_file = 'data/pcs_exp_numbat.txt';
 %output file: 1st column exp, 2nd column: our prediction value
 pcs_exp_pred_file = 'data/pcs_exp_pred.txt';
+numbat_file = 'data/tensor_numbat.txt';
+our_tensor_file = 'data/tensor_ours.txt';
+chi_file = 'data/chi_file.txt';
+which_chi = 'zz';
 %extract coordinates and exp value
 [pcs_exp,pdb_coor] = preprocess(pcs_exp_file, pdb_file, pdb_model);
-
 %call function
-guess = [0,0,0];
+guess = [56,-93,-10];
 options = optimset('TolFun',1e-9,'TolX',1e-9,'MaxFunEvals',1000000,'MaxIter',100000);
 fprintf('Start searching process...\n')
-[position, Chi2]=fminsearch(@(guess) pcs_solver(guess,pdb_coor,pcs_exp,pcs_exp_pred_file),guess,options);
+[position, Chi2]=fminsearch(@(guess) pcs_solver(guess,pdb_coor,pcs_exp,pcs_exp_pred_file, chi_file, which_chi),guess,options);
 fprintf('Search finished.\n')
-%compare with numbat
-exp_numbat = dlmread(exp_numbat_file);
-numbat_chi2 = sum((exp_numbat(:,1) - exp_numbat(:,2)).^2);
-fprintf('Our chi square is %f, and Chi square of numbat is %f', Chi2, numbat_chi2)
+%compare with numbat tensors
+[diff_ax,diff_rh, ax_error,rh_error] = read_tensor(numbat_file, chi_file, which_chi);
+fprintf('Chi-square eliminating type is %s \n',which_chi);
+fprintf('(Unit is 10^-32m^-3) The difference between chi_ax is %0.3f, numbat error is %0.3f;\n',diff_ax,ax_error);
+fprintf('(Unit is 10^-32m^-3) The difference between chi_rh is %0.3f, numbat error is %0.3f;',diff_rh,rh_error);
+%compare with numbat pcs results
+%exp_numbat = dlmread(exp_numbat_file);
+%numbat_chi2 = sum((exp_numbat(:,1) - exp_numbat(:,2)).^2);
+%fprintf('Our chi square is %f, and Chi square of numbat is %f', Chi2, numbat_chi2)
