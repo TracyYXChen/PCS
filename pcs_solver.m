@@ -36,19 +36,17 @@ x =  A_inv * pcs_exp;
 pcs_calc = A * x;
 if which_chi == 'zz'
     [chi_xx,chi_xy,chi_xz,chi_yy,chi_yz] = deal(x(1),x(2),(3),x(4),x(5));
-    %order is 'xx-xy-xz-yy-yz'
-    dlmwrite(chi_file, [chi_xx, chi_xy,chi_xz,chi_yy,chi_yz]);
+    chi_zz = -(chi_xx + chi_yy);
 elseif which_chi == 'xx'
     [chi_xy,chi_xz,chi_yy,chi_yz,chi_zz] = deal(x(1),x(2),(3),x(4),x(5));
-    %order is 'xy-xz-yy-yz-zz'
-    dlmwrite(chi_file, [chi_xy, chi_xz,chi_yy,chi_yz,chi_zz]);
+    chi_xx = -(chi_yy + chi_zz);
 elseif which_chi == 'yy'
-    [chi_xx,chi_xy,chi_xz,chi_yy,chi_yz] = deal(x(1),x(2),(3),x(4),x(5));
-    %order is 'xx-xy-xz-yz-zz'
-    dlmwrite(chi_file, [chi_xx, chi_xy,chi_xz,chi_yy,chi_yz]);
+    [chi_xx,chi_xy,chi_xz,chi_yz,chi_zz] = deal(x(1),x(2),(3),x(4),x(5));
+    chi_yy = -(chi_xx + chi_zz);
 else
     fprintf('which_chi could only be xx,yy or zz, others are not supported');
 end
+dlmwrite(chi_file, [chi_xx, chi_xy,chi_xz,chi_yy,chi_yz, chi_zz]);
 dlmwrite(pcs_file, [pcs_exp, pcs_calc]);
 Chi_2 = sum((pcs_calc - pcs_exp).^2);
 return
