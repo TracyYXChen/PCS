@@ -16,13 +16,15 @@ fid = fopen(chi_file);
 my_chi=textscan(fid,'%f %f %f %f %f %f','delimiter',',');
 fclose(fid); 
 [chi_xx,chi_xy,chi_xz,chi_yy,chi_yz,chi_zz] = deal(my_chi{1},my_chi{2},my_chi{3},my_chi{4},my_chi{5},my_chi{6});
+fprintf('Here are chi_xx, chi_xy, chi_xz, chi_yy, chi_yz and chi_zz');
+[chi_xx,chi_xy,chi_xz,chi_yy,chi_yz,chi_zz]
 if strcmp(which_method,'formula')
 %Method 1: calculate by formula below
 %numbat use 10^-32m^-3, here we already have 10^-30m^3, so they need to be
 %divided by 100
 %ax = zz - (xx+yy)/2
 %rh = xx - yy
-    fprintf('Below are my_ax and my_rh returned by diag')
+    fprintf('Below are my_ax and my_rh returned by formula')
     my_chiax = (chi_zz-(chi_xx+chi_yy)/2)/100
     my_chirh = (chi_xx-chi_yy)/100
 %diff_ax = my_chiax - chi_ax;
