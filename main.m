@@ -22,6 +22,8 @@ numbat_file = 'data/tensor_numbat.txt';
 our_tensor_file = 'data/tensor_ours.txt';
 chi_file = 'data/chi_file.txt';
 which_chi = 'zz';
+%which_method could only be 'diag' or 'formula'
+which_method = 'formula';
 %extract coordinates and exp value
 [pcs_exp,pdb_coor] = preprocess(pcs_exp_file, pdb_file, pdb_model);
 %call function
@@ -31,10 +33,8 @@ fprintf('Start searching process...\n')
 [position, Chi2]=fminsearch(@(guess) pcs_solver(guess,pdb_coor,pcs_exp,pcs_exp_pred_file, chi_file, which_chi),guess,options);
 fprintf('Search finished.\n')
 %compare with numbat tensors
-[diff_ax,diff_rh, ax_error,rh_error] = read_tensor(numbat_file, chi_file, which_chi);
 fprintf('Chi-square eliminating type is %s \n',which_chi);
-fprintf('(Unit is 10^-32m^-3) The difference between chi_ax is %0.3f, numbat error is %0.3f;\n',diff_ax,ax_error);
-fprintf('(Unit is 10^-32m^-3) The difference between chi_rh is %0.3f, numbat error is %0.3f;',diff_rh,rh_error);
+read_tensor(numbat_file, chi_file, which_method);
 %compare with numbat pcs results
 %exp_numbat = dlmread(exp_numbat_file);
 %numbat_chi2 = sum((exp_numbat(:,1) - exp_numbat(:,2)).^2);
