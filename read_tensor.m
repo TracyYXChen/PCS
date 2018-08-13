@@ -3,7 +3,7 @@
 %Yuexi (Tracy) Chen
 %August 12, 2018
 
-function [diff_ax,diff_rh, ax_error,rh_error] = read_tensor(numbat_file, chi_file,which_chi)
+function read_tensor(numbat_file, chi_file,which_method)
 %read numbat_file
 fid = fopen(numbat_file);
 data=textscan(fid,'%s %f %f','HeaderLines',1,'delimiter',' ');
@@ -13,27 +13,33 @@ chi_rh = data{2}(2);
 [x,y,z] = deal(data{2}(3),data{2}(4),data{2}(5));
 [alpha,beta,gamma] = deal(data{2}(6),data{2}(7),data{2}(8));
 fid = fopen(chi_file);
-my_chi=textscan(fid,'%f %f %f %f %f','delimiter',',');
-fclose(fid);
-%calculate our chi_ax and chi_rh
+my_chi=textscan(fid,'%f %f %f %f %f %f','delimiter',',');
+fclose(fid); 
+[chi_xx,chi_xy,chi_xz,chi_yy,chi_yz,chi_zz] = deal(my_chi{1},my_chi{2},my_chi{3},my_chi{4},my_chi{5},my_chi{6});
+if strcmp(which_method,'formula')
+%Method 1: calculate by formula below
 %numbat use 10^-32m^-3, here we already have 10^-30m^3, so they need to be
 %divided by 100
 %ax = zz - (xx+yy)/2
 %rh = xx - yy
-if which_chi == 'zz'
-    my_chiax = (-my_chi{1}-my_chi{4}-(my_chi{1}+my_chi{4})/2)/100;
-    my_chirh = (my_chi{1}-my_chi{4})/100;
-elseif which_chi == 'xx'
-    my_chiax = (my_chi{5}-(-my_chi{3} - my_chi{5} + my_chi{3})/2)/100;
-    my_chirh = (-my_chi{3}-my_chi{5} - my_chi{3})/100;
-elseif which_chi == 'yy'
-    my_chiax = (my_chi{5}-(my_chi{1} - my_chi{5} - my_chi{1})/2)/100;
-    my_chirh = (my_chi{1}-(-my_chi{5}-my_chi{1}))/100;
+    fprintf('Below are my_ax and my_rh returned by diag')
+    my_chiax = (chi_zz-(chi_xx+chi_yy)/2)/100
+    my_chirh = (chi_xx-chi_yy)/100
+%diff_ax = my_chiax - chi_ax;
+%diff_rh = my_chirh - chi_rh;
+%Method 2: calculate by diag
+elseif strcmp(which_method, 'diag')
+    my_mat = zeros(3);
+    [my_mat(1,1),my_mat(2,2),my_mat(3,3)] = deal(chi_xx,chi_yy,chi_zz);
+    [my_mat(1,2),my_mat(2,1)] = deal(chi_xy,chi_xy);
+    [my_mat(1,3),my_mat(3,1)] = deal(chi_xz,chi_xz);
+    [my_mat(2,3),my_mat(2,3)] = deal(chi_yz,chi_yz);
+    fprintf('Below are my_ax and my_rh returned by diag');
+    my_eig = eig(my_mat);
+    my_chiax = (my_eig(3) - (my_eig(1) + my_eig(2))/2)/100
+    my_chirh = (my_eig(1) - my_eig(2))/100
 else
-    fprintf('only xx, yy, zz are supported types of which_chi')
-end
-diff_ax = my_chiax - chi_ax;
-diff_rh = my_chirh - chi_rh;
+    fprinf('%s is not supported, only accept diag and formula',which_method)
 ax_error = data{3}(1);
 rh_error = data{3}(2);
 end
