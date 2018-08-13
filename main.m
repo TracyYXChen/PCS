@@ -21,7 +21,7 @@ pcs_exp_pred_file = 'data/pcs_exp_pred.txt';
 numbat_file = 'data/tensor_numbat.txt';
 our_tensor_file = 'data/tensor_ours.txt';
 chi_file = 'data/chi_file.txt';
-which_chi = 'zz';
+which_chi = 'xx';
 %which_method could only be 'diag' or 'formula'
 which_method = 'formula';
 %extract coordinates and exp value
@@ -32,6 +32,8 @@ options = optimset('TolFun',1e-9,'TolX',1e-9,'MaxFunEvals',1000000,'MaxIter',100
 fprintf('Start searching process...\n')
 [position, Chi2]=fminsearch(@(guess) pcs_solver(guess,pdb_coor,pcs_exp,pcs_exp_pred_file, chi_file, which_chi),guess,options);
 fprintf('Search finished.\n')
+fprintf('Now the position is')
+position
 %compare with numbat tensors
 fprintf('Chi-square eliminating type is %s \n',which_chi);
 read_tensor(numbat_file, chi_file, which_method);
