@@ -18,7 +18,15 @@ para_center = [70.8092,-85.3409,-14.6403];
 fid=fopen(chi_file);
 data=textscan(fid,'%f %f %f %f %f %f','delimiter',',');
 fclose(fid);
-chi_mat = [data{1},data{2},data{3},data{4},data{5}]';
+if which_chi == 'xx'
+    chi_mat = [data{2},data{3},data{4},data{5},data{6}]';
+elseif which_chi == 'yy'
+    chi_mat = [data{1},data{2},data{3},data{5},data{6}]';
+elseif which_chi == 'zz'
+    chi_mat = [data{1},data{2},data{3},data{4},data{5}]';
+else
+    fprintf('only xx,yy,zz are supported')
+end
 %--------build A matrix----------
 [pcs_exp,pdb_coor] = preprocess(pcs_exp_file, pdb_file, pdb_model);
 num_res = length(pcs_exp);
