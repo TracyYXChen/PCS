@@ -23,7 +23,7 @@ our_tensor_file = 'data/tensor_ours.txt';
 chi_file = 'data/chi_file.txt';
 which_chi = 'xx';
 %which_method could only be 'diag' or 'formula'
-which_method = 'formula';
+which_method = 'diag';
 %extract coordinates and exp value
 [pcs_exp,pdb_coor] = preprocess(pcs_exp_file, pdb_file, pdb_model);
 %call function
