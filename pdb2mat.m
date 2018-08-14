@@ -63,8 +63,6 @@
 function [PDBdata] = pdb2mat(readFile,model_num)
 %% -- OUTPUT --
 
-tic;
-
 PDBdata.outfile = readFile;
 
 % initialize file
@@ -189,7 +187,5 @@ PDBdata.charge     = strtrim(charge);
 
 % close file
 fclose(FileID);
-
-toc;
 
 end
