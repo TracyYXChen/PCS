@@ -15,6 +15,7 @@ numbat_file = 'data/tensor_numbat.txt';
 pdb_model = 1;
 para_center = [70.8092,-85.3409,-14.6403];
 %--------build chi_matrix----------
+tic
 fid=fopen(chi_file);
 data=textscan(fid,'%f %f %f %f %f %f','delimiter',',');
 fclose(fid);
@@ -59,7 +60,7 @@ if pcs_calc == pcs_prev_calc
 else fprintf('No\n');
 end
 %---------compare position and delta_chi------
-guess = [56,-93,-10];
+guess = [5,-100,-20];
 options = optimset('TolFun',1e-9,'TolX',1e-9,'MaxFunEvals',1000000,'MaxIter',100000);
 fprintf('Start searching process...\n')
 [position, Chi2]=fminsearch(@(guess) pcs_solver(guess,pdb_coor,pcs_calc,after_pcs_file, chi_file, which_chi),guess,options);
