@@ -27,13 +27,16 @@ which_method = 'diag';
 %extract coordinates and exp value
 [pcs_exp,pdb_coor] = preprocess(pcs_exp_file, pdb_file, pdb_model);
 %call function
-guess = [56,-93,-10];
+guess = [57 -94 -9];
+numbat_posi = [56.611 -93.464 -10.031];
 options = optimset('TolFun',1e-9,'TolX',1e-9,'MaxFunEvals',1000000,'MaxIter',100000);
 fprintf('Start searching process...\n')
 [position, Chi2]=fminsearch(@(guess) pcs_solver(guess,pdb_coor,pcs_exp,pcs_exp_pred_file, chi_file, which_chi),guess,options);
 fprintf('Search finished.\n')
 fprintf('Now the position is')
 position
+fprintf('The distance between prediction and numbat is')
+ditance = sqrt(sum((numbat_posi - position).^2))
 %compare with numbat tensors
 fprintf('Chi-square eliminating type is %s \n',which_chi);
 read_tensor(numbat_file, chi_file, which_method);
