@@ -25,8 +25,8 @@ if strcmp(which_method,'formula')
 %ax = zz - (xx+yy)/2
 %rh = xx - yy
     fprintf('Below are my_ax and my_rh returned by formula')
-    my_chiax = (chi_zz-(chi_xx+chi_yy)/2)/100
-    my_chirh = (chi_xx-chi_yy)/100
+    my_chiax = (chi_zz-(chi_xx+chi_yy)/2)
+    my_chirh = (chi_xx-chi_yy)
 %diff_ax = my_chiax - chi_ax;
 %diff_rh = my_chirh - chi_rh;
 %Method 2: calculate by diag
@@ -38,8 +38,8 @@ elseif strcmp(which_method, 'diag')
     [my_mat(2,3),my_mat(2,3)] = deal(chi_yz,chi_yz);
     fprintf('Below are my_ax and my_rh returned by diag');
     my_eig = eig(my_mat);
-    my_chiax = (my_eig(3) - (my_eig(1) + my_eig(2))/2)/100
-    my_chirh = (my_eig(1) - my_eig(2))/100
+    my_chiax = my_eig(3) - (my_eig(1) + my_eig(2))/2
+    my_chirh = my_eig(1) - my_eig(2)
 else
     fprinf('%s is not supported, only accept diag and formula',which_method)
 ax_error = data{3}(1);
