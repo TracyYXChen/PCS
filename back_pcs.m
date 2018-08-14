@@ -29,6 +29,8 @@ else
 end
 %--------build A matrix----------
 [pcs_exp,pdb_coor] = preprocess(pcs_exp_file, pdb_file, pdb_model);
+%here we don't use pcs_exp but use pcs_calc in the future, but just use the residue number
+%to extract coordinates
 num_res = length(pcs_exp);
 A = zeros(num_res,5);
 x = pdb_coor(:,1);
@@ -47,7 +49,7 @@ for ii = 1:num_res
     end
 end
 %--------calculate PCS----------
-pcs_calc = A * chi_mat ./100;
+pcs_calc = A * chi_mat;
 dlmwrite(after_pcs_file, pcs_calc);
 tmp = dlmread(pcs_exp_pred_file);
 pcs_prev_calc = tmp(:,2);
