@@ -11,7 +11,7 @@ data=textscan(fid,'%f %s %f %f','delimiter',' ');
 fclose(fid);
 res_num = data{1};
 atom = data{2};
-pcs_exp = data{3};
+pcs_exp = data{3}*10^-6;
 err = data{4};
 %---read pdb file ---
 PDBdata = pdb2mat(pdb_file,pdb_model);
