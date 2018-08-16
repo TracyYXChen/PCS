@@ -29,9 +29,9 @@ Ry = [cos(beta) 0 sin(beta); 0 1 0; -sin(beta) 0 cos(beta)];
 Rz = [cos(gamma) -sin(gamma) 0;sin(gamma) cos(gamma) 0;0 0 1];
 %Here our rotation matrix is z-y-z
 Rx = [cos(alpha) -sin(alpha) 0;sin(alpha) cos(alpha) 0;0 0 1];
-Rot_mat = Rx*Ry*Rz;
+Rot_mat = Rz*Ry*Rx;
 %----rotate operation
-diag_chi = diag([chi_xx, chi_yy,chi_zz])
+diag_chi = diag([chi_xx, chi_yy,chi_zz]);
 %we have diag_mat = C.T * A * C
 %A = inv(C.T)*diag_mat*inv(C)
 %inv(C.T) = C
@@ -71,10 +71,11 @@ for ii = 1:num_res
 end
 %----calculate PCS----
 cond(A)
-now_pcs = A * chi_mat
+now_pcs = A * chi_mat * 100
 %compare with numbat
 tmp = dlmread(exp_numbat_file);
 numbat_pcs = tmp(:,2)
+plot(1:length(numbat_pcs), numbat_pcs - now_pcs)
 
 
 
