@@ -8,8 +8,10 @@ function read_tensor(numbat_file, chi_file,which_method)
 fid = fopen(numbat_file);
 data=textscan(fid,'%s %f %f','HeaderLines',1,'delimiter',' ');
 fclose(fid);
-chi_ax = data{2}(1);
-chi_rh = data{2}(2);
+fprintf('Below are ax and rh tensor returned by Numbat\n')
+chi_ax = data{2}(1)
+chi_rh = data{2}(2)
+fprintf('Below are positions returned by Numbat\n')
 [x,y,z] = deal(data{2}(3),data{2}(4),data{2}(5));
 [alpha,beta,gamma] = deal(data{2}(6),data{2}(7),data{2}(8));
 fid = fopen(chi_file);
@@ -20,8 +22,6 @@ fprintf('Here are chi_xx, chi_xy, chi_xz, chi_yy, chi_yz and chi_zz');
 [chi_xx,chi_xy,chi_xz,chi_yy,chi_yz,chi_zz]
 if strcmp(which_method,'formula')
 %Method 1: calculate by formula below
-%numbat use 10^-32m^-3, here we already have 10^-30m^3, so they need to be
-%divided by 100
 %ax = zz - (xx+yy)/2
 %rh = xx - yy
     fprintf('Below are my_ax and my_rh returned by formula')
