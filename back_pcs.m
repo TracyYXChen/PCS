@@ -63,7 +63,7 @@ end
 guess = [5,-100,-20];
 options = optimset('TolFun',1e-9,'TolX',1e-9,'MaxFunEvals',1000000,'MaxIter',100000);
 fprintf('Start searching process...\n')
-[position, Chi2]=fminsearch(@(guess) pcs_solver(guess,pdb_coor,pcs_calc,after_pcs_file, chi_file, which_chi),guess,options);
+[position, Chi2]=fminsearch(@(guess) svd_solver(guess,pdb_coor,pcs_calc,after_pcs_file, chi_file, which_chi),guess,options);
 fprintf('Search finished.\n')
 fprintf('Now the position is\n')
 position
