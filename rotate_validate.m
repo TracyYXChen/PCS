@@ -38,7 +38,8 @@ diag_chi = diag([chi_xx, chi_yy,chi_zz]);
 prev_chi = Rot_mat * diag_chi * inv(Rot_mat);
 [prev_chi_xx, prev_chi_yy,prev_chi_zz] = deal(prev_chi(1,1),prev_chi(2,2),prev_chi(3,3));
 [prev_chi_xy, prev_chi_xz,prev_chi_yz] = deal(prev_chi(1,2), prev_chi(1,3),prev_chi(2,3));
-now_chi = [prev_chi_xx, prev_chi_xy, prev_chi_xz, prev_chi_yy, prev_chi_yz, prev_chi_zz];
+fprintf('now chi is')
+now_chi = [prev_chi_xx, prev_chi_xy, prev_chi_xz, prev_chi_yy, prev_chi_yz, prev_chi_zz]
 if which_chi == 'xx'
     chi_mat = [now_chi(2),now_chi(3),now_chi(4), now_chi(5), now_chi(6)]';
 elseif which_chi == 'yy'
@@ -71,11 +72,10 @@ for ii = 1:num_res
 end
 %----calculate PCS----
 cond(A)
-now_pcs = A * chi_mat * 100
 %compare with numbat
 tmp = dlmread(exp_numbat_file);
-numbat_pcs = tmp(:,2)
-plot(1:length(numbat_pcs), numbat_pcs - now_pcs)
+numbat_pcs = tmp(:,2);
+
 
 
 
