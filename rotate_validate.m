@@ -1,8 +1,8 @@
-%----------------------------------
+%% -----Info-----
 %rotate matrix
 %Yuexi (Tracy) Chen
 %August 14, 2018
-%----hyperparams------
+%% -----hyperparams-----
 numbat_file = 'data/tensor_numbat.txt';
 pcs_exp_file = 'data/pcs_exp.txt';
 pdb_file = 'data/1d3z.pdb';
@@ -11,7 +11,7 @@ pdb_model = 1;
 which_chi = 'xx';
 %numbat para_center
 para_center = [56.611 -93.464 -10.031];
-%----read numbat-------
+%% -----read numbat-----
 fid = fopen(numbat_file);
 data=textscan(fid,'%s %f %f','HeaderLines',1,'delimiter',' ');
 fclose(fid);
@@ -22,7 +22,7 @@ chi_rh = data{2}(2);
 chi_zz = 2/3 * chi_ax;
 chi_yy = -(chi_rh + chi_zz)/2;
 chi_xx = -(chi_yy + chi_zz);
-%----create rotation matrix
+%% -----create rotation matrix-----
 %normal basic rotation matrix
 Rx = [1 0 0; 0 cos(alpha) -sin(alpha); 0 sin(alpha) cos(alpha)];
 Ry = [cos(beta) 0 sin(beta); 0 1 0; -sin(beta) 0 cos(beta)];
@@ -30,7 +30,7 @@ Rz = [cos(gamma) -sin(gamma) 0;sin(gamma) cos(gamma) 0;0 0 1];
 %Here our rotation matrix is z-y-z
 Rx = [cos(alpha) -sin(alpha) 0;sin(alpha) cos(alpha) 0;0 0 1];
 Rot_mat = Rz*Ry*Rx;
-%----rotate operation
+%% -----rotate operation-----
 diag_chi = diag([chi_xx, chi_yy,chi_zz]);
 %we have diag_mat = C.T * A * C
 %A = inv(C.T)*diag_mat*inv(C)
@@ -49,7 +49,7 @@ elseif which_chi == 'zz'
 else
     fprintf('only xx,yy,zz are supported')
 end
-%---construct A mat
+%% -----construct A mat-----
 [pcs_exp,pdb_coor] = preprocess(pcs_exp_file, pdb_file, pdb_model);
 %here we don't use pcs_exp but use pcs_calc in the future, but just use the residue number
 %to extract coordinates
@@ -70,7 +70,7 @@ for ii = 1:num_res
         fprintf('which_chi could only be xx,yy or zz, others are not supported');
     end
 end
-%----calculate PCS----
+%% -----calculate PCS-----
 cond(A)
 %compare with numbat
 tmp = dlmread(exp_numbat_file);

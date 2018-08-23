@@ -1,10 +1,10 @@
-%---text handler----
+%% -----text handler-----
 %input: 
 %1. pcs_exp, 4 columns: residue number, atom name, pcs_exp, error?
 %2. corresponding PDB file   
 %output: coordinates of those atoms in the PDB file
 
-%---read pcs file ---
+%% -----read pcs file -----
 function [pcs_exp, pdb_coor] = preprocess(pcs_exp_file, pdb_file, pdb_model)
 fid = fopen(pcs_exp_file);
 data=textscan(fid,'%f %s %f %f','delimiter',' ');

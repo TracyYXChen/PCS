@@ -1,4 +1,4 @@
-%----------------
+%% -----Info-----
 %perform experiment
 %-------
 %outline
@@ -9,7 +9,7 @@
 %4. calculate Chi^2 between PCS_exp and PCS_theory
 %5. reinitialize coor of paramagnetic center
 %6. After several iterations, return calculated PCS tensors and coor of paramagnetic center
-
+%% -----hyperparams-----
 %define parameter
 pcs_exp_file = 'data/pcs_exp.txt';
 pdb_file = 'data/1d3z.pdb';
@@ -25,6 +25,7 @@ which_chi = 'xx';
 %which_method could only be 'diag' or 'formula'
 which_method = 'diag';
 %extract coordinates and exp value
+%% -----simplex-----
 [pcs_exp,pdb_coor] = preprocess(pcs_exp_file, pdb_file, pdb_model);
 %call function
 guess = [57 -94 -9];

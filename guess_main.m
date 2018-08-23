@@ -1,4 +1,4 @@
-%----------------
+%% -----Info-----
 %perform experiment
 %-------
 %outline
@@ -10,7 +10,7 @@
 %5. reinitialize coor of paramagnetic center
 %6. After several iterations, return calculated PCS tensors and coor of paramagnetic center
 
-%--------hyper parameters---------------
+%% -----hyper parameters-----
 pcs_exp_file = 'data/pcs_exp.txt';
 pdb_file = 'data/1d3z.pdb';
 pdb_model = 1;
@@ -22,7 +22,7 @@ numbat_file = 'data/tensor_numbat.txt';
 chi_file = 'data/chi_file.txt';
 which_chi = 'xx';
 which_method = 'diag';
-%--------preprocess--------------------
+%% -----preprocess-----
 tic
 %extract coordinates and exp value
 [pcs_exp,pdb_coor] = preprocess(pcs_exp_file, pdb_file, pdb_model);
@@ -41,6 +41,7 @@ position_and_chi(8) = 0.5*4 - 4*0.5*rand(1);
 fprintf("initialization is")
 position_and_chi
 %numbat_posi = [56.611 -93.464 -10.031];
+%% -----simplex-----
 options = optimset('TolFun',1e-9,'TolX',1e-9,'MaxFunEvals',1000000,'MaxIter',100000);
 fprintf('Start searching process...\n')
 [position_and_chi, Chi2]=fminsearch(@(guess) guess_solver(guess,pdb_coor,pcs_exp,pcs_exp_pred_file, chi_file, which_chi),guess,options);

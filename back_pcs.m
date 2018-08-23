@@ -1,9 +1,8 @@
-%----------------------------------
+%% -----Author & Scripts Info-----
 %Recover Pseudocontact Shift(PCS) tensors 
 %Yuexi (Tracy) Chen
 %Aug 13, 2018
-%----------------------------------
-%--------hyperparameters-----------
+%% -----hyperparameters-----
 which_chi = 'xx';
 which_method = 'diag';
 chi_file = 'data/chi_file.txt';
@@ -14,7 +13,7 @@ after_pcs_file = 'data/after_pcs.txt';
 numbat_file = 'data/tensor_numbat.txt';
 pdb_model = 1;
 para_center = [70.8092,-85.3409,-14.6403];
-%--------build chi_matrix----------
+%% -----build chi_matrix-----
 tic
 fid=fopen(chi_file);
 data=textscan(fid,'%f %f %f %f %f %f','delimiter',',');
@@ -28,7 +27,7 @@ elseif which_chi == 'zz'
 else
     fprintf('only xx,yy,zz are supported')
 end
-%--------build A matrix----------
+%% -----build A matrix-----
 [pcs_exp,pdb_coor] = preprocess(pcs_exp_file, pdb_file, pdb_model);
 %here we don't use pcs_exp but use pcs_calc in the future, but just use the residue number
 %to extract coordinates
@@ -49,7 +48,7 @@ for ii = 1:num_res
         fprintf('which_chi could only be xx,yy or zz, others are not supported');
     end
 end
-%--------calculate PCS----------
+%% -----calculate PCS-----
 pcs_calc = A * chi_mat;
 dlmwrite(after_pcs_file, pcs_calc);
 tmp = dlmread(pcs_exp_pred_file);
@@ -59,7 +58,7 @@ if pcs_calc == pcs_prev_calc
     fprinf('Yes\n');
 else fprintf('No\n');
 end
-%---------compare position and delta_chi------
+%% -----compare position and delta_chi------
 guess = [5,-100,-20];
 options = optimset('TolFun',1e-9,'TolX',1e-9,'MaxFunEvals',1000000,'MaxIter',100000);
 fprintf('Start searching process...\n')

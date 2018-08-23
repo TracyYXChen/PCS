@@ -1,8 +1,8 @@
-%----------------------------------
+%% -----Info-----
 %Solve Pseudocontact Shift(PCS) tensors 
 %Yuexi (Tracy) Chen
 %July 31, 2018
-
+%% -----func-----
 function [Chi_2] = guess_solver(guess, pdb_coor, pcs_exp, pcs_file, chi_file, which_chi)
 %guess: initialization of paramagnetic center
 %pbd_coor: pdb coordinates

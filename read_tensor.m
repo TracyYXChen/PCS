@@ -1,8 +1,8 @@
-%----------------------------------
+%% -----Info-----
 %compare numbat tensor with ours
 %Yuexi (Tracy) Chen
 %August 12, 2018
-
+%% -----func-----
 function read_tensor(numbat_file, chi_file,which_method)
 %read numbat_file
 fid = fopen(numbat_file);
