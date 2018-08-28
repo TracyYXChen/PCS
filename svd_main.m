@@ -10,7 +10,6 @@
 %5. reinitialize coor of paramagnetic center
 %6. After several iterations, return calculated PCS tensors and coor of paramagnetic center
 %% -----hyperparams-----
-%define parameter
 pcs_exp_file = 'data/pcs_exp.txt';
 pdb_file = 'data/1d3z.pdb';
 pdb_model = 1;
