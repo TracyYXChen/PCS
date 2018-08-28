@@ -5,7 +5,7 @@
 %% -----solve svd -----
 function [Chi_2] = svd_solver(guess, pdb_coor, pcs_exp, pcs_file, chi_file, which_chi)
 %guess: initialization of paramagnetic center
-%pbd_coor: pdb coordinates
+%pbd_coor: a list of pdb coordinates
 %pcs_exp: pcs experiment
 %pcs_file: file to store exp and predicted pcs for comparison
 %construct A matrix
@@ -27,7 +27,8 @@ for ii = 1:num_res
         fprintf('which_chi could only be xx,yy or zz, others are not supported');
     end
 end        
-%SVD 
+%SVD
+fprintf('condition number of A is %f\n',cond(A));
 [U, S, V] = svd(A);
 %x = A-1 * PCS_exp
 %S is not square, use pinv
