@@ -8,7 +8,7 @@ pcs_exp_file = 'data/pcs_exp.txt';
 pdb_file = 'data/1d3z.pdb';
 exp_numbat_file = 'data/pcs_exp_numbat.txt';
 pdb_model = 1;
-which_chi = 'xx';
+which_chi = 'zz';
 %numbat para_center
 para_center = [56.611 -93.464 -10.031];
 %% -----read numbat-----
@@ -24,12 +24,13 @@ chi_yy = -(chi_rh + chi_zz)/2;
 chi_xx = -(chi_yy + chi_zz);
 %% -----create rotation matrix-----
 %normal basic rotation matrix
-Rx = [1 0 0; 0 cos(alpha) -sin(alpha); 0 sin(alpha) cos(alpha)];
-Ry = [cos(beta) 0 sin(beta); 0 1 0; -sin(beta) 0 cos(beta)];
-Rz = [cos(gamma) -sin(gamma) 0;sin(gamma) cos(gamma) 0;0 0 1];
+Rx = [1 0 0; 0 cosd(alpha) -sind(alpha); 0 sind(alpha) cosd(alpha)];
+Ry = [cosd(beta) 0 sind(beta); 0 1 0; -sind(beta) 0 cosd(beta)];
+Rz = [cosd(gamma) -sind(gamma) 0;sind(gamma) cosd(gamma) 0;0 0 1];
 %Here our rotation matrix is z-y-z
-Rx = [cos(alpha) -sin(alpha) 0;sin(alpha) cos(alpha) 0;0 0 1];
-Rot_mat = Rz*Ry*Rx;
+Rx = [cosd(alpha) -sind(alpha) 0;sind(alpha) cosd(alpha) 0;0 0 1];
+%Rot_mat = Rz*Ry*Rx;
+%Rot_mat = Rx*Ry*Rz;
 %% -----rotate operation-----
 diag_chi = diag([chi_xx, chi_yy,chi_zz]);
 %we have diag_mat = C.T * A * C
@@ -39,7 +40,7 @@ prev_chi = Rot_mat * diag_chi * inv(Rot_mat);
 [prev_chi_xx, prev_chi_yy,prev_chi_zz] = deal(prev_chi(1,1),prev_chi(2,2),prev_chi(3,3));
 [prev_chi_xy, prev_chi_xz,prev_chi_yz] = deal(prev_chi(1,2), prev_chi(1,3),prev_chi(2,3));
 fprintf('now chi is')
-now_chi = [prev_chi_xx, prev_chi_xy, prev_chi_xz, prev_chi_yy, prev_chi_yz, prev_chi_zz]
+now_chi = [prev_chi_xx, prev_chi_xy, prev_chi_xz, prev_chi_yy, prev_chi_yz, prev_chi_zz];
 if which_chi == 'xx'
     chi_mat = [now_chi(2),now_chi(3),now_chi(4), now_chi(5), now_chi(6)]';
 elseif which_chi == 'yy'
@@ -71,9 +72,11 @@ for ii = 1:num_res
     end
 end
 %% -----calculate PCS-----
-cond(A)
+fprintf('Here is the pcs calculated')
+cal_pcs = A * chi_mat
 %compare with numbat
 tmp = dlmread(exp_numbat_file);
+fprintf('Here is the pcs returned by Numbat')
 numbat_pcs = tmp(:,2);
 
 
