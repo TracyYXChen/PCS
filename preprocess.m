@@ -24,9 +24,9 @@ pdb_coor = zeros(num_select,3);
 for ii=1: num_select
     for jj=1: num_all
       if (res_num(ii) == PDBdata.resNum(jj)) && isequal(atom(ii),PDBdata.atomName(jj))
-          pdb_coor(ii,1) = PDBdata.X(jj); 
-          pdb_coor(ii,2) = PDBdata.Y(jj);
-          pdb_coor(ii,3) = PDBdata.Z(jj); 
+          pdb_coor(ii,1) = PDBdata.X(jj)*10^-10; 
+          pdb_coor(ii,2) = PDBdata.Y(jj)*10^-10;
+          pdb_coor(ii,3) = PDBdata.Z(jj)*10^-10; 
       end
     end
 end
