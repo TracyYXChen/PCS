@@ -8,9 +8,9 @@ pcs_exp_file = 'data/pcs_exp.txt';
 pdb_file = 'data/1d3z.pdb';
 exp_numbat_file = 'data/pcs_exp_numbat.txt';
 pdb_model = 1;
-which_chi = 'zz';
+which_chi = 'xx';
 %numbat para_center
-para_center = [56.611 -93.464 -10.031];
+para_center = [56.611 -93.464 -10.031].*10^-10;
 %% -----read numbat-----
 fid = fopen(numbat_file);
 data=textscan(fid,'%s %f %f','HeaderLines',1,'delimiter',' ');
@@ -29,24 +29,24 @@ Ry = [cosd(beta) 0 sind(beta); 0 1 0; -sind(beta) 0 cosd(beta)];
 Rz = [cosd(gamma) -sind(gamma) 0;sind(gamma) cosd(gamma) 0;0 0 1];
 %Here our rotation matrix is z-y-z
 Rx = [cosd(alpha) -sind(alpha) 0;sind(alpha) cosd(alpha) 0;0 0 1];
-%Rot_mat = Rz*Ry*Rx;
+Rot_mat = Rz*Ry*Rx;
 %Rot_mat = Rx*Ry*Rz;
 %% -----rotate operation-----
 diag_chi = diag([chi_xx, chi_yy,chi_zz]);
 %we have diag_mat = C.T * A * C
 %A = inv(C.T)*diag_mat*inv(C)
 %inv(C.T) = C
-prev_chi = Rot_mat * diag_chi * inv(Rot_mat);
+prev_chi = Rot_mat'* diag_chi * Rot_mat;
 [prev_chi_xx, prev_chi_yy,prev_chi_zz] = deal(prev_chi(1,1),prev_chi(2,2),prev_chi(3,3));
 [prev_chi_xy, prev_chi_xz,prev_chi_yz] = deal(prev_chi(1,2), prev_chi(1,3),prev_chi(2,3));
 fprintf('now chi is')
 now_chi = [prev_chi_xx, prev_chi_xy, prev_chi_xz, prev_chi_yy, prev_chi_yz, prev_chi_zz];
 if which_chi == 'xx'
-    chi_mat = [now_chi(2),now_chi(3),now_chi(4), now_chi(5), now_chi(6)]';
+    chi_mat = [now_chi(2),now_chi(3),now_chi(4), now_chi(5), now_chi(6)]'.*10^-32;
 elseif which_chi == 'yy'
-    chi_mat = [now_chi(1),now_chi(2),now_chi(3), now_chi(5), now_chi(6)]';
+    chi_mat = [now_chi(1),now_chi(2),now_chi(3), now_chi(5), now_chi(6)]'.*10^-32;
 elseif which_chi == 'zz'
-    chi_mat = [now_chi(1),now_chi(2),now_chi(3), now_chi(4), now_chi(5)]';
+    chi_mat = [now_chi(1),now_chi(2),now_chi(3), now_chi(4), now_chi(5)]'.*10^-32;
 else
     fprintf('only xx,yy,zz are supported')
 end
@@ -66,18 +66,19 @@ for ii = 1:num_res
     elseif which_chi == 'xx'
         A(ii,:)=(1/r_sqr^2.5 * 1/(4 * pi)) .* [2*x(ii)*y(ii), 2*x(ii)*z(ii), y(ii)^2 - x(ii)^2, 2*y(ii)*z(ii), z(ii)^2 - x(ii)^2]; 
     elseif which_chi == 'yy'
-         A(ii,:)=(1/r_sqr^2.5 * 1/(4 * pi)) .* [x(ii)^2 - y(ii)^2, 2*x(ii)*y(ii),2*x(ii)*z(ii),2*y(ii)*z(ii), z(ii)^2 - y(ii)^2];
+        A(ii,:)=(1/r_sqr^2.5 * 1/(4 * pi)) .* [x(ii)^2 - y(ii)^2, 2*x(ii)*y(ii),2*x(ii)*z(ii),2*y(ii)*z(ii), z(ii)^2 - y(ii)^2];
     else
         fprintf('which_chi could only be xx,yy or zz, others are not supported');
     end
 end
 %% -----calculate PCS-----
-fprintf('Here is the pcs calculated')
-cal_pcs = A * chi_mat
+fprintf('Here is the pcs calculated');
+cal_pcs = A * chi_mat;
 %compare with numbat
 tmp = dlmread(exp_numbat_file);
-fprintf('Here is the pcs returned by Numbat')
+fprintf('Here is the pcs returned by Numbat');
 numbat_pcs = tmp(:,2);
+scatter(cal_pcs,numbat_pcs)
 
 
 
