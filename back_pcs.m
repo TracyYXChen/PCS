@@ -12,7 +12,7 @@ pdb_file = 'data/1d3z.pdb';
 after_pcs_file = 'data/after_pcs.txt';
 numbat_file = 'data/tensor_numbat.txt';
 pdb_model = 1;
-para_center = [70.8092,-85.3409,-14.6403];
+para_center = [56.611,-93.464,-10.031]*10^-10;
 %% -----build chi_matrix-----
 tic
 fid=fopen(chi_file);
@@ -20,6 +20,7 @@ data=textscan(fid,'%f %f %f %f %f %f','delimiter',',');
 fclose(fid);
 if which_chi == 'xx'
     chi_mat = [data{2},data{3},data{4},data{5},data{6}]';
+    
 elseif which_chi == 'yy'
     chi_mat = [data{1},data{2},data{3},data{5},data{6}]';
 elseif which_chi == 'zz'
@@ -37,37 +38,41 @@ x = pdb_coor(:,1);
 y = pdb_coor(:,2);
 z = pdb_coor(:,3);
 for ii = 1:num_res
-    r_sqr = (para_center(1) - x(ii))^2 + (para_center(2) - y(ii))^2 +(para_center(3) - z(ii))^2;
+    r_sqr = (para_center(1) - x(ii))^2 + (para_center(2) - y(ii))^2 +(para_center(3) - z(ii))^2
     if which_chi == 'zz'
         A(ii,:)=(1/r_sqr^2.5 * 1/(4 * pi)) .* [x(ii)^2 - z(ii)^2, 2*x(ii)*y(ii), 2*x(ii)*z(ii), y(ii)^2 - z(ii)^2, 2*y(ii)*z(ii)];
+        %A(ii,:) = [x(ii)^2 - z(ii)^2, 2*x(ii)*y(ii), 2*x(ii)*z(ii), y(ii)^2 - z(ii)^2, 2*y(ii)*z(ii)]
     elseif which_chi == 'xx'
         A(ii,:)=(1/r_sqr^2.5 * 1/(4 * pi)) .* [2*x(ii)*y(ii), 2*x(ii)*z(ii), y(ii)^2 - x(ii)^2, 2*y(ii)*z(ii), z(ii)^2 - x(ii)^2]; 
+        %A(ii,:) = [2*x(ii)*y(ii), 2*x(ii)*z(ii), y(ii)^2 - x(ii)^2, 2*y(ii)*z(ii), z(ii)^2 - x(ii)^2]; 
     elseif which_chi == 'yy'
-         A(ii,:)=(1/r_sqr^2.5 * 1/(4 * pi)) .* [x(ii)^2 - y(ii)^2, 2*x(ii)*y(ii),2*x(ii)*z(ii),2*y(ii)*z(ii), z(ii)^2 - y(ii)^2];
+        A(ii,:)=(1/r_sqr^2.5 * 1/(4 * pi)) .* [x(ii)^2 - y(ii)^2, 2*x(ii)*y(ii),2*x(ii)*z(ii),2*y(ii)*z(ii), z(ii)^2 - y(ii)^2];
+        %A(ii,:) = [x(ii)^2 - y(ii)^2, 2*x(ii)*y(ii),2*x(ii)*z(ii),2*y(ii)*z(ii), z(ii)^2 - y(ii)^2]
     else
         fprintf('which_chi could only be xx,yy or zz, others are not supported');
     end
 end
+cond(A)
 %% -----calculate PCS-----
-pcs_calc = A * chi_mat;
-dlmwrite(after_pcs_file, pcs_calc);
-tmp = dlmread(pcs_exp_pred_file);
-pcs_prev_calc = tmp(:,2);
-fprintf('Are pcs_calc and pcs_rev the same\n');
-if pcs_calc == pcs_prev_calc
-    fprinf('Yes\n');
-else fprintf('No\n');
-end
+%pcs_calc = A * chi_mat;
+%dlmwrite(after_pcs_file, pcs_calc);
+%tmp = dlmread(pcs_exp_pred_file);
+%pcs_prev_calc = tmp(:,2);
+%fprintf('Are pcs_calc and pcs_rev the same\n');
+%if pcs_calc == pcs_prev_calc
+%    fprinf('Yes\n');
+%else fprintf('No\n');
+%end
 %% -----compare position and delta_chi------
-guess = [5,-100,-20];
-options = optimset('TolFun',1e-9,'TolX',1e-9,'MaxFunEvals',1000000,'MaxIter',100000);
-fprintf('Start searching process...\n')
-[position, Chi2]=fminsearch(@(guess) svd_solver(guess,pdb_coor,pcs_calc,after_pcs_file, chi_file, which_chi),guess,options);
-fprintf('Search finished.\n')
-fprintf('Now the position is\n')
-position
+%guess = [5,-100,-20];
+%options = optimset('TolFun',1e-9,'TolX',1e-9,'MaxFunEvals',1000000,'MaxIter',100000);
+%fprintf('Start searching process...\n')
+%[position, Chi2]=fminsearch(@(guess) svd_solver(guess,pdb_coor,pcs_calc,after_pcs_file, chi_file, which_chi),guess,options);
+%fprintf('Search finished.\n')
+%fprintf('Now the position is\n')
+%position
 %compare with numbat tensors
-fprintf('Chi-square eliminating type is %s \n',which_chi);
-read_tensor(numbat_file, chi_file, which_method);
+%fprintf('Chi-square eliminating type is %s \n',which_chi);
+%read_tensor(numbat_file, chi_file, which_method);
 
 

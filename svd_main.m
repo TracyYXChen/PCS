@@ -27,8 +27,8 @@ which_method = 'diag';
 %% -----simplex-----
 [pcs_exp,pdb_coor] = preprocess(pcs_exp_file, pdb_file, pdb_model);
 %call function
-guess = [57 -94 -9];
-numbat_posi = [56.611 -93.464 -10.031];
+guess = [57 -94 -9]*10^-10;
+numbat_posi = [56.611 -93.464 -10.031]*10^-10;
 options = optimset('TolFun',1e-9,'TolX',1e-9,'MaxFunEvals',1000000,'MaxIter',100000);
 fprintf('Start searching process...\n')
 [position, Chi2]=fminsearch(@(guess) svd_solver(guess,pdb_coor,pcs_exp,pcs_exp_pred_file, chi_file, which_chi),guess,options);
