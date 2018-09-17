@@ -62,7 +62,6 @@
 
 function [PDBdata] = pdb2mat(readFile,model_num)
 %% -- OUTPUT --
-
 PDBdata.outfile = readFile;
 
 % initialize file
@@ -89,19 +88,24 @@ Z          = cell(1,numLines);
 
 comment    = cell(1,numLines);
 
-% read each line
-model_now = sprintf('MODEL        %d',model_num);
-model_next = sprintf('MODEL        %d',model_num +1);    
-for n = 1:numLines
-    modelLine = cell2mat(splitLines(n));
-    if contains(modelLine, 'MODEL') && contains(modelLine, model_now)
-        starter = n;
-    else if  contains(modelLine, model_next);
-        ender = n-1;
+if nargin > 1 
+    % read each line
+    model_now = sprintf('MODEL        %d',model_num);
+    model_next = sprintf('MODEL        %d',model_num +1);    
+    for n = 1:numLines
+        modelLine = cell2mat(splitLines(n));
+        %modelLine(1:5)
+        if contains(modelLine, 'MODEL') && contains(modelLine, model_now)
+            starter = n
+        elseif  contains(modelLine, model_next);
+            ender = n-1
         end
     end
-end
-        
+elseif nargin == 1
+    starter = 1;
+    ender = numLines;
+end    
+    
 for m = starter:ender
     thisLine = cell2mat(splitLines(m));
     if length(thisLine) > 53 && sum(isstrprop(thisLine(23:53), 'alpha')) == 0    
@@ -122,6 +126,8 @@ for m = starter:ender
             m = m + 1;
     end    
 end
+
+    
 
 % trim exess
 keepData = logical(strcmp(recordName,'ATOM  ') + strcmp(recordName,'HETATM'));

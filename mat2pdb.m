@@ -55,7 +55,7 @@
 %
 % 
 
-function mat2pdb(input)
+function mat2pdb(input,newfile,which)
 %% review XYZ coordinate data 
 
 % coordinate data is required! Checking XYZ input
@@ -75,7 +75,7 @@ end
 
 % in case optional data data not given, fill in blanks
 if ~isfield(input, 'outfile')
-    input.outfile = 'mat2PDB.pdb';
+    input.outfile = newfile;
 end
 if ~isfield(input, 'recordName')
     input.recordName = cell(1,length(X));
@@ -130,6 +130,23 @@ occupancy  = input.occupancy;
 betaFactor = input.betaFactor;
 element    = input.element;
 charge     = input.charge;
+%% revise chain
+if strcmp(which,'A1')
+    %1d3z
+    chainID(1:end) = {'z'};
+elseif strcmp(which,'B1')
+    chainID(1:end) = {'y'};
+elseif strcmp(which,'dimer')
+    for jj = 1:length(chainID)
+        if isequal(chainID(jj),{'A'})
+            chainID(jj) = {'c'}
+        elseif isequal(chainID(jj),{'B'})
+            chainID(jj) = {'d'}
+        end
+    end
+else
+    fprintf('Type %s is not supported', which)    
+end
 
 %% remove faulty inputs
 
@@ -194,8 +211,8 @@ end
 %% create PDB
 
 % open file
-fprintf('outputting PDB in file %s\n', outfile);
-FILE = fopen(outfile, 'w');
+fprintf('outputting PDB in file %s\n', newfile);
+FILE = fopen(newfile, 'w');
 
 % output data
 for n = 1:length(atomNum)
