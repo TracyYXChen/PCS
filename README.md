@@ -1,10 +1,10 @@
 # PCS
 PseudoContact Shift
-- [squre](#parent)
-- [Usage](#no)
+- [Squre](#squre)
+- [Usage](#usage)
 
-## parent
+## Squre
 Improvement
 
-## no
+## Usage
 run.m
