@@ -1,7 +1,7 @@
 # PCS
 PseudoContact Shift
-- [Background] (#background)
-- [Usage] (#usage)
+- [Background](#background)
+- [Usage](#usage)
 
 ## Background
 Improvement
