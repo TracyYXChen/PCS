@@ -1,9 +1,9 @@
 # PCS
 PseudoContact Shift
-- [Background](#background)
-- [Usage](#usage)
+- [Background](#parent)
+- [Usage](#Usage)
 
-## Background
+## parent
 Improvement
 
 ## Usage
